@@ -27,7 +27,9 @@ public class BallotGui extends JPanel implements ActionListener, Serializable {
     public BallotGui(String name, String[] cName) {
         super(new GridBagLayout());
         
-        /*userName = name; 
+        /*
+         * This is a change
+        userName = name; 
         textField = new JTextField("Enter msg here", 20);
         textField.addActionListener(this); 
         prevText = textField.getText(); 
