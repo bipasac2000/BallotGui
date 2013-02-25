@@ -12,10 +12,14 @@ public class BallotGui extends JPanel implements ActionListener{
     private JFrame[] popUp; 
     private JButton submitButton; 
     private int numCandidates; 
+    private LocalBallot lb; 
+    private String[] cName; 
+    private String voterId; 
 
-    public BallotGui(String name, String[] cName, String[] cInfo) {
+    public BallotGui(String name, String[] inputNames, String[] cInfo) {
         super(new GridBagLayout());
         
+        cName = inputNames;
         numCandidates = cName.length; 
         radioButton = new JRadioButton[numCandidates]; 
         jButton = new JButton[numCandidates];
@@ -88,7 +92,10 @@ public class BallotGui extends JPanel implements ActionListener{
         }
         
         if(submitButton == evt.getSource()){
+        	
         	for (int i = 0; i<numCandidates; i++){
+        		if (radioButton[i].isSelected())
+        			lb.updateTable(voterId, cName[i]); 
         		radioButton[i].setSelected(false); 
         	}
         }
@@ -109,8 +116,9 @@ public class BallotGui extends JPanel implements ActionListener{
         frame.setVisible(true);
     }
 
-    public void create() {
+    public void create(LocalBallot inputLb) {
         
+    	  lb = inputLb; 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

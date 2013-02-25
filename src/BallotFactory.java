@@ -1,18 +1,23 @@
 
 public class BallotFactory {
 
-	public static BallotGui makeBallot(String cName, String type){
+	public static BallotInterface makeBallot(String[] cName, String[] cInfo, int id){
+
+				LocalBallot lb = new LocalBallot(cName, cInfo, id);
+				return lb; 
+		}
+	
+	public static BallotInterface makeBallot(String type, int id){
+		
 		if (type.equals("national")){
-			NationalBallotGui nb = new NationalBallotGui(cName); 
+			NationalBallot nb = new NationalBallot(id); 
 			return nb; 
 		}
 		else if (type.equals("state")){
-			StateBallotGui sb = new StateBallotGui(cName);
+			StateBallot sb = new StateBallot(id);
 			return sb; 
 		}
-		else if (type.equals("local")){
-				LocalBallotGui lb = new LocalBallotGui(cName);
-				return lb; 
-		}
+	
+		return null; 
 	}
 }
