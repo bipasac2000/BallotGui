@@ -1,71 +1,44 @@
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
+//import java.io.Serializable;
 import javax.swing.*;
 
 
-public class BallotGui extends JPanel implements ActionListener, Serializable {
-		/**
-	 * 
-	 */
-	  private static final long serialVersionUID = 1L;
-		protected JTextField textField;
-    protected JTextField topicField; 
-    protected JTextArea textArea;
-    protected JTextArea typeArea; 
-    protected JRadioButton[] radioButton;
-    protected JButton[] jButton; 
-    protected JButton submitButton; 
-    protected JComboBox comboBox; 
-    protected Timer timer; 
-    protected String prevText; 
-    protected String userName; 
-    private final static String newline = "\n";
+public class BallotGui extends JPanel implements ActionListener{
+	 
+    private JRadioButton[] radioButton;
+    private JButton[] jButton; 
+    private JFrame[] popUp; 
+    private JButton submitButton; 
+    private int numCandidates; 
 
-    public BallotGui(String name, String[] cName) {
+    public BallotGui(String name, String[] cName, String[] cInfo) {
         super(new GridBagLayout());
         
-        /*
-         * This is a change
-        userName = name; 
-        textField = new JTextField("Enter msg here", 20);
-        textField.addActionListener(this); 
-        prevText = textField.getText(); 
-        
-        topicField = new JTextField("Receit a poem",20); 
-        topicField.addActionListener(this); 
-
-        textArea = new JTextArea(20, 20);
-        textArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        */
-        
-        radioButton = new JRadioButton[cName.length]; 
-        jButton = new JButton[cName.length];
-        for(int i =0; i<cName.length; i++){
-        	radioButton[i] = new JRadioButton(cName[i], true);
-        	jButton[i] = new JButton("Get Information"); 
+        numCandidates = cName.length; 
+        radioButton = new JRadioButton[numCandidates]; 
+        jButton = new JButton[numCandidates];
+        popUp = new JFrame[numCandidates]; 
+        		
+        for(int i =0; i<numCandidates; i++){
+        	// Initialize radio buttons 
+        	radioButton[i] = new JRadioButton(cName[i], false);
+        	radioButton[i].addActionListener(this);
+        	// Initialize information buttons
+        	jButton[i] = new JButton("Get Information");
+        	jButton[i].addActionListener(this); 
+        	// Initialize popup frames
+        	popUp[i] = new JFrame(cInfo[i]); 
+        	popUp[i].setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        	popUp[i].setVisible(false); 
         }
         submitButton = new JButton("Submit"); 
-        /*jButton1 = new J
-        radioButton2 = new JRadioButton("Candidate2", false); 
-        radioButton3 = new JRadioButton("Candidate3", false); 
-        */
-        /*typeArea = new JTextArea("Not entered text", 1, 20); 
-        typeArea.setEditable(false); */
+        submitButton.addActionListener(this); 
         
-        /*String[] status = { "Available", "Away", "Busy", "Idle" };
-        comboBox = new JComboBox(status);
-        comboBox.setSelectedIndex(0);
-        comboBox.addActionListener(this);*/
-        
-        /*timer = new Timer(1000, this); 
-        timer.start(); */
 
         //Add Components to this panel.
-        GridBagLayout gridBag = new GridBagLayout(); 
+        //GridBagLayout gridBag = new GridBagLayout(); 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.fill = GridBagConstraints.BOTH;
@@ -75,16 +48,7 @@ public class BallotGui extends JPanel implements ActionListener, Serializable {
         c.weightx = 1;
         c.weighty = 1;
         
-        /*add(topicField, c);
-        add(scrollPane, c);
-        //add(typeArea, c);
-        //add(textField, c); 
-        add(comboBox, c); 
-        add(radioButton1, c); 
-        add(radioButton2, c);
-        add(radioButton3, c);*/
-        
-        for (int i = 0; i<cName.length; i++){
+        for (int i = 0; i<numCandidates; i++){
         	c.anchor = GridBagConstraints.EAST; 
         	c.gridx = 0; 
         	c.gridy = i; 
@@ -103,56 +67,38 @@ public class BallotGui extends JPanel implements ActionListener, Serializable {
         add(submitButton, c); 
         
     }
-    
-    
-
+ 
     public void actionPerformed(ActionEvent evt) {
-    	//System.out.println(evt.getSource()); 
-    	  String returnText = null; 
-    		if (timer == evt.getSource()){
-    			String newText = textField.getText(); 
-    			//System.out.println("This is the text " + text);
-    			//System.out.println("This is the text " + prevText); 
-    			if (newText.equals(prevText)){
-    				if (prevText.equals("") || prevText.equals("Enter msg here"))
-    					typeArea.setText("Not entered text"); 
-    				else 
-    					typeArea.setText("Entered text but not typing");	
-    			}
-    			else 
-    				typeArea.setText("Typing");
-    			prevText = newText; 
-    			returnText = typeArea.getText();  
-    		}
-    		
-    		if (textField == evt.getSource()){
-    			String text = textField.getText();
-        	textArea.append(text + newline);
-        	textField.setText("");
-        	//typeArea.setText("Not entered text");
-        	returnText = text; 
+        
+    	for (int i=0; i<numCandidates; i++){
+    		if (jButton[i] == evt.getSource())
+    			popUp[i].setVisible(true); 
+    	}
+    	
+    	for (int i = 0; i<numCandidates; i++){
+        	if (radioButton[i] == evt.getSource()){
+        		for (int j = 0; j<numCandidates; j++){
+        			if (j!=i)
+        				radioButton[j].setSelected(false); 
+        			else
+        				radioButton[j].setSelected(true); 
+        				
+        		}
+        	}
         }
-    		
-    		if (comboBox == evt.getSource()){ //if (!("comboBoxChanged".equals(evt.getActionCommand()))){ 
-    			String text = (String) comboBox.getSelectedItem();   
-    			textArea.append("User is " + text + newline); 
-    			returnText = text; 
-    		}
-
-        //Make sure the new text is visible, even if there
-        //was a selection in the text area.
-        textArea.setCaretPosition(textArea.getDocument().getLength()); 
+        
+        if(submitButton == evt.getSource()){
+        	for (int i = 0; i<numCandidates; i++){
+        		radioButton[i].setSelected(false); 
+        	}
+        }
+        	
     }
-    
 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
+    
     private void createAndShowGUI() { 
         //Create and set up the window.
-        JFrame frame = new JFrame(userName);
+        JFrame frame = new JFrame("Ballot");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Add contents to the window.
@@ -164,8 +110,7 @@ public class BallotGui extends JPanel implements ActionListener, Serializable {
     }
 
     public void create() {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
