@@ -15,6 +15,7 @@ public class BallotGui extends JPanel implements ActionListener{
     private LocalBallot lb; 
     private String[] cName; 
     private String voterId; 
+    private JTextField typeField; 
 
     public BallotGui(String name, String[] inputNames, String[] cInfo) {
         super(new GridBagLayout());
@@ -40,6 +41,9 @@ public class BallotGui extends JPanel implements ActionListener{
         submitButton = new JButton("Submit"); 
         submitButton.addActionListener(this); 
         
+        typeField = new JTextField("Enter VoterId", 20); 
+        typeField.addActionListener(this); 
+        
 
         //Add Components to this panel.
         //GridBagLayout gridBag = new GridBagLayout(); 
@@ -51,6 +55,7 @@ public class BallotGui extends JPanel implements ActionListener{
         
         c.weightx = 1;
         c.weighty = 1;
+        
         
         for (int i = 0; i<numCandidates; i++){
         	c.anchor = GridBagConstraints.EAST; 
@@ -67,6 +72,8 @@ public class BallotGui extends JPanel implements ActionListener{
           add(jButton[i], c); 
           //c.gridwidth = GridBagConstraints.REMAINDER;
         }
+        c.gridy++; 
+        add(typeField, c);
         c.gridy++; 
         add(submitButton, c); 
         
@@ -93,6 +100,8 @@ public class BallotGui extends JPanel implements ActionListener{
         
         if(submitButton == evt.getSource()){
         	
+        	voterId = typeField.getText(); 
+        	typeField.setText("Enter VoterId"); 
         	for (int i = 0; i<numCandidates; i++){
         		if (radioButton[i].isSelected())
         			lb.updateTable(voterId, cName[i]); 

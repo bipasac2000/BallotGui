@@ -11,6 +11,11 @@ public class NationalBallot implements BallotInterface{
 	
 	public NationalBallot(int inputId){
 		id = inputId; 
+		stateBallots = new ArrayList<StateBallot>(); 
+	}
+	
+	public void addStateBallot (StateBallot sb){
+		stateBallots.add(sb); 
 	}
 
 	public Hashtable <String, Integer> tallyVotes() {
@@ -52,6 +57,7 @@ public class NationalBallot implements BallotInterface{
 		      winner = key;
 		    }
 		}
+		System.out.println("Result of National ballot"); 
 		System.out.println(winner + " is the winner. Has " + max + " votes."); 
 		
 	}

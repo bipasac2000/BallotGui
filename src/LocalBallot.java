@@ -10,6 +10,8 @@ public class LocalBallot implements BallotInterface{
   Hashtable<String, String> localVotes;  
 	
 	LocalBallot(String []names, String[] info, int id){
+		cName = new String[names.length]; 
+		cInfo = new String[info.length]; 
 		for (int i=0; i<names.length; i++){
 			cName[i] = names[i]; 
 			cInfo[i] = info[i]; 
@@ -44,7 +46,7 @@ public class LocalBallot implements BallotInterface{
 
 	public void castVote() {
 		BallotGui b = new BallotGui("Ballot", cName, cInfo);
-		b.create(this);
+		b.create(this); 
 	}
 
 
@@ -62,6 +64,7 @@ public class LocalBallot implements BallotInterface{
 		      winner = key;
 		    }
 		}
+		System.out.println("Result of Local ballot"); 
 		System.out.println(winner + " is the winner. Has " + max + " votes."); 
 	}
 	
