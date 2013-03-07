@@ -1,21 +1,27 @@
 
 public class BallotMain {
-	
-	public static void main (String[] args) throws InterruptedException{
-		String[] cName = {"C1", "C2", "C3"}; 
-		String[] cInfo = {"I1", "I2", "I3"}; 
-		int id = 1; 
-		LocalBallot localBallot = (LocalBallot)BallotFactory.makeBallot(cName, cInfo, id); 
-		localBallot.castVote();
-		// wait a minute for votes to be cast
-		Thread.sleep(60000); 
-		localBallot.getResults();
-		StateBallot stateBallot = (StateBallot)BallotFactory.makeBallot("state", id+1); 
-		stateBallot.addLocalBallot(localBallot);
-		stateBallot.getResults(); 
-		NationalBallot nationalBallot = (NationalBallot)BallotFactory.makeBallot("national", id+2); 
-		nationalBallot.addStateBallot(stateBallot); 
-		nationalBallot.getResults(); 
-	}
+
+    public static void main (String[] args) throws InterruptedException{
+	String[] cName = {"Candidate 1", "Candidate 2", "Candidate 3"}; 
+	String[] cInfo = {"Candidate 1 Info", "Candidate 2 Info", "Candidate 3 Info"}; 
+	int id = 1; 
+	LocalBallot chapelHillBallot = (LocalBallot)BallotFactory.makeBallot(cName, cInfo, id); 
+	chapelHillBallot.castVote();
+	LocalBallot durhamBallot = (LocalBallot)BallotFactory.makeBallot(cName, cInfo, id+1); 
+	// test state and national ballots - wait a minute for votes to be cast
+	Thread.sleep(60000); 
+	chapelHillBallot.getResults();
+	StateBallot NCBallot = (StateBallot)BallotFactory.makeBallot("state", id+2); 
+	NCBallot.add(chapelHillBallot);
+	NCBallot.add(durhamBallot);
+	NCBallot.getResults(); 
+	LocalBallot charlestonBallot = (LocalBallot)BallotFactory.makeBallot(cName, cInfo, id+3); 
+	StateBallot SCBallot = (StateBallot)BallotFactory.makeBallot("state", id+4); 
+	SCBallot.add(charlestonBallot);
+	NationalBallot nationalBallot = (NationalBallot)BallotFactory.makeBallot("national", id+5);
+	nationalBallot.add(NCBallot); 
+	nationalBallot.add(SCBallot);
+	nationalBallot.getResults(); 
+    }
 
 }
